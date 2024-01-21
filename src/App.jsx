@@ -6,6 +6,7 @@ import Dashboard from './page/Dashboard'
 import Product from './page/Product'
 import ProductDetail from './page/ProductDetail'
 import Cart from './page/Cart'
+import OrderCompleted from './page/OrderCompleted'
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
         <Route path='/products' element={<Product/>}/>
         <Route path='/product-detail/:productId' element={<ProductDetail/>}/>
         <Route path='/cart' element={<Cart/>}/>
+        <Route path='/order-complete' element={<OrderCompleted />}/>
       </Routes>
       </BrowserRouter>
     </div>

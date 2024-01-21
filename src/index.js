@@ -1,1 +1,0 @@
-const products = require("src/database/products.js")
