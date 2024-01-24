@@ -12,6 +12,7 @@ import HomeAdmin from './page/HomeAdmin'
 import CreateProduct from './page/CreateProduct'
 import Store from './page/Store'
 import CreateStore from './page/CreateStore'
+import UpdateStore from './page/UpdateStore'
 
 function App() {
 
@@ -20,7 +21,7 @@ function App() {
 
   const location = useLocation()
   const navigate = useNavigate();
-  console.log(location)
+  // console.log(location)
 
   useEffect(() => {
     if(token && location.pathname === "/login") {
@@ -47,6 +48,7 @@ function App() {
             <Route path='/create/product' element={<CreateProduct/>}/>
             <Route path='/create/store' element={<CreateStore/>}/>
             <Route path='/stores' element={<Store/>}/>
+            <Route path='/update/store' element={<UpdateStore/>}/>
           </>
           :
           <>

@@ -8,7 +8,7 @@ const Navbar = () => {
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
     const navigate = useNavigate();
-    console.log(localStorage)
+    // console.log(localStorage)
 
     const logout = () => {
         localStorage.removeItem("token")
