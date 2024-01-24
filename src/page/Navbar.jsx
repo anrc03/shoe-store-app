@@ -1,10 +1,21 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { useSelector } from 'react-redux';
-import { Link, Navigate, Outlet } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
 
     const state = useSelector((state) => state.cart.cartItem);
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+    const navigate = useNavigate();
+    console.log(localStorage)
+
+    const logout = () => {
+        localStorage.removeItem("token")
+        localStorage.removeItem("username")
+        localStorage.removeItem("role")
+        navigate("/login")
+    }
 
         return (
         <div>  
@@ -30,17 +41,30 @@ const Navbar = () => {
                             <Link style={{fontWeight: 'bolder'}} className="nav-link" to="/"><strong>SHOPEMART</strong></Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/">Dashboard</Link>
+                            <Link className="nav-link" to={role === "ROLE_ADMIN" ? "/home/admin" : "/"}>{role === "ROLE_ADMIN" ? "Admin Home" : "Home"}</Link>
                         </li>
+                        {role === "ROLE_ADMIN" && 
+                        <li className="nav-item">
+                            <Link className="nav-link" to="/stores">Store</Link>
+                        </li>}
                         <li className="nav-item">
                             <Link className="nav-link" to="/products">Products</Link>
                         </li>
                         </ul>
-                        <span className='navbar-text'><Link className="nav-link" to="/login">Login</Link></span>
-                        <Link to='/cart'>
-                        <img src="/assets/cart.svg" style={{marginLeft: 25}} height="20" alt="Cart" loading="lazy"></img>
-                        ({state.length})
-                        </Link>
+
+                        <span className='navbar-text'>
+                            <button className="btn" onClick={() => navigate("/register/admin")}>
+                                {!token && "Want to sell your own product?"}
+                            </button>
+                            <button className="btn" onClick={() => navigate("/register")}>
+                                {!token && "Register"}
+                            </button>
+                            <button className="btn" onClick={token ? logout : () => navigate("/login")}>
+                                {token ? "Logout" : "Login"}
+                            </button>
+                        </span>
+                        <img src="/assets/cart.svg" style={{marginLeft: 25, cursor:"pointer"}} height="20" alt="Cart" loading="lazy" onClick={token ? () => navigate("/cart") : () => navigate("/login")}></img>
+                        <div className='ms-0' style={{backgroundColor:"wheat", width:"18px", height:"18px", borderRadius:"50%", justifyContent:"center", alignItems:"center", display:"flex"}}>{state.length}</div>
                     </div>
                     </div>
                 </nav>

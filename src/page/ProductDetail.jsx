@@ -1,36 +1,51 @@
-import React from 'react'
-import withLayout from '../HOC/Layout'
-import { Link, useParams } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react'
+import withLayout from '../hoc/Layout'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useDispatch } from 'react-redux';
 import { addItem } from '../redux/cartSlice';
+import axios from 'axios';
 
 const ProductDetail = () => {
 
     const {productId} = useParams();
-    const products = useSelector((state) => state.cart.items)
+
+    const url = "http://localhost:8081/api/v1/products"
+    const [productList, setProductList] = useState([])
+
+    console.log(productList)
+    
+    useEffect(() => {
+        axios.get(url).then((response) => {
+            console.log(response)
+            setProductList(response.data);
+        });
+    }, []);
+
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleAddToCart = (product) => {
         dispatch(addItem(product))
     }
-   
-    // console.log(products)
-    // console.log(productId)
 
   return (
     <div className='container' style={{display:'flex'}}>
+        {console.log(productList)}
         <div className='fixed' style={{width:800, marginRight:70}}>
-            <img src='/assets/product1.jpg' alt='product'></img>
+            <img src="/assets/laptop.jpg" alt='product' style={{ width: "40rem", height: "40rem" }}></img>
         </div>
 
         <div className='flex-item' style={{flexGrow:1, marginTop:100}}>
-            <h1>{products[productId-1].name}</h1>
-            <h2>{`$ ${products[productId-1].price}`}</h2>
+            <h1>{productList[productId].productName}</h1>
+            <h2>{`Rp. ${productList[productId].price}`}</h2>
             <br></br>
-            <p> {products[productId-1].name} Lorem ipsum, dolor sit amet consectetur adipisicing elit. Officia sit ut dolor alias dolores, 
+            <p> {productList[productId].productName} Lorem ipsum, dolor sit amet consectetur adipisicing elit. Officia sit ut dolor alias dolores, 
                 tempore nihil corporis mollitia dicta distinctio. Iure unde possimus, temporibus quos iste accusamus totam maxime reiciendis!</p>
             <br></br>
-            <button onClick={() => handleAddToCart(products[productId-1])}>Add to Cart</button>
+            <button onClick={() => handleAddToCart(productList[productId])}>Add to Cart</button>
+            <br></br>
+            <br></br>
+            <button onClick={() => navigate("/cart")}>Check your cart</button>
         </div>
     </div>
   )

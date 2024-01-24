@@ -1,16 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import withLayout from '../HOC/Layout'
+import withLayout from '../hoc/Layout'
 import { addItem, checkedOut, decreaseItem } from '../redux/cartSlice'
-import { useNavigate } from 'react-router-dom'
 
 const Cart = () => {
 
     const cart = useSelector((state) => state.cart.cartItem)
-    // console.log(cart[0].price)
+
     const image = '/assets/product1.jpg'
     const dispatch = useDispatch();
-    const navigate = useNavigate();
+
+    const emptyCart = "Your cart is currently empty"
+    const orderComplete = "Thank you for shopping with us!"
+    const [display, setDisplay] = useState(emptyCart)
 
     const handleAddToCart = (product) => {
         dispatch(addItem(product))
@@ -21,7 +23,7 @@ const Cart = () => {
 
     const handleCheckout = (product) => {
         dispatch(checkedOut(product))
-        navigate("/order-complete")
+        setDisplay(orderComplete)
     }
 
     const subtotal = (arr) => {
@@ -32,20 +34,18 @@ const Cart = () => {
         return result;
     }
 
-    const emptyCart = <div className='cart-empty'><h4 style={{textAlign:'center', marginBottom:450}}><br/>Your cart is currently empty</h4></div>
-
     const cartFilled = (product) => {
         return(
                 <div className="px-4 rounded-3 py-5">
                 <div className="container py-4">
                     <div className="row justify-content-center">
                         <div className="col-md-4">
-                            <img src={image} alt={product.name} height="200px" width="180px" />
+                            <img src={image} alt={product.productName} height="200px" width="180px" />
                         </div>
                         <div className="col-md-4">
-                            <h3>{product.name}</h3>
+                            <h3>{product.productName}</h3>
                             <p className="lead fw-bold">
-                                ${product.price} ({product.cartQuantity}) = ${Math.round(product.cartQuantity * product.price)}
+                                {product.price} ({product.cartQuantity}) = {Math.round(product.cartQuantity * product.price)}
                             </p>
                             <button className="btn" onClick={()=>handleDecreaseQty(product)}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-dash-square" viewBox="0 0 16 16">
@@ -68,12 +68,12 @@ const Cart = () => {
     
   return (
     <div className='cart-container'>
-        <h2 style={{textAlign:'center'}}>Shopping Cart</h2>
-        {cart.length === 0 && emptyCart}
+        {/* <h2 style={{textAlign:'center'}}>Shopping Cart</h2> */}
+        {cart.length === 0 && <div className='cart-empty'><h4 style={{textAlign:'center', marginBottom:450}}><br/>{display}</h4></div>}
         {cart.length !== 0 && cart.map(cartFilled)}
         {cart.length !== 0 && 
             <div>
-                <h2 style={{textAlign:'center'}}>Subtotal = $ {subtotal(cart)}</h2>
+                <h2 style={{textAlign:'center'}}>Subtotal = Rp. {subtotal(cart)}</h2>
                 <br></br>
                 <div className="d-flex justify-content-center align-items-center">
                     <button className='btn btn-primary btn-lg' onClick={() => window.confirm("Are you sure?") && dispatch(handleCheckout) }>Complete Order</button>

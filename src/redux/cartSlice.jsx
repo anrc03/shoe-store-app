@@ -1,8 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import productList from "../database/products";
+import axios from "axios";
+import { useEffect, useState } from "react";
+// import productList from "../database/products";
 
 const initialState = {
-    items: productList,
+    // items: productList,
     cartItem: localStorage.getItem("cartItem") ? JSON.parse(localStorage.getItem("cartItem")) : [],
     totalPrice: 0,
 }
