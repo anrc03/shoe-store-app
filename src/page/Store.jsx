@@ -16,7 +16,7 @@ const Store = () => {
         axios.get(url).then((response) => {
             setStoreList(response.data);
         });
-    }, [storeList]);
+    }, []);
 
     const storeCards = storeList.map((store) => 
         <div
